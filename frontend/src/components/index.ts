@@ -13,5 +13,6 @@ export { KPISection } from './KPISection';
 export { StockDemandChart } from './StockDemandChart';
 export { ProductFilters } from './ProductFilters';
 export { ProductsTable } from './ProductsTable';
+export { ProductDetailDrawer } from './ProductDetailDrawer';
 export { Pagination } from './Pagination';
 export { Dashboard } from './Dashboard';

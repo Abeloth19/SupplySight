@@ -5,6 +5,7 @@ import { KPISection } from './KPISection';
 import { StockDemandChart } from './StockDemandChart';
 import { ProductFilters } from './ProductFilters';
 import { ProductsTable } from './ProductsTable';
+import { ProductDetailDrawer } from './ProductDetailDrawer';
 import { useProductFilters } from '../hooks/useProductFilters';
 import { type DateRange, type ProductFilters as ProductFiltersType, type Product } from '../types';
 
@@ -23,6 +24,18 @@ export function Dashboard() {
 
   const handleProductClick = useCallback((product: Product) => {
     setSelectedProduct(product);
+  }, []);
+
+  const handleCloseDrawer = useCallback(() => {
+    setSelectedProduct(null);
+  }, []);
+
+  const handleUpdateDemand = useCallback((productId: string, demand: number) => {
+    console.log('Update demand:', productId, demand);
+  }, []);
+
+  const handleTransferStock = useCallback((productId: string, fromWarehouse: string, toWarehouse: string, quantity: number) => {
+    console.log('Transfer stock:', productId, fromWarehouse, toWarehouse, quantity);
   }, []);
 
   return (
@@ -58,6 +71,14 @@ export function Dashboard() {
           </div>
         </div>
       </Container>
+
+      <ProductDetailDrawer
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
+        onClose={handleCloseDrawer}
+        onUpdateDemand={handleUpdateDemand}
+        onTransferStock={handleTransferStock}
+      />
     </div>
   );
 }

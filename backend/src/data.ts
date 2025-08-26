@@ -28,21 +28,33 @@ export const warehouses = [
   { id: "DEL-B", name: "Delhi B", location: "Delhi" }
 ];
 
+// Simple seeded random function for consistent data
+const seededRandom = (seed: number) => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
+
 export const generateKPIData = (range: string) => {
   const days = range === "7d" ? 7 : range === "14d" ? 14 : 30;
   const data = [];
   
+  const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
+  const totalDemand = products.reduce((sum, p) => sum + p.demand, 0);
+  
   for (let i = days; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
+    const dateString = date.toISOString().split('T')[0];
     
-    const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
-    const totalDemand = products.reduce((sum, p) => sum + p.demand, 0);
+    // Use date as seed to ensure same values for same date across all ranges
+    const dateSeed = new Date(dateString).getTime();
+    const stockVariation = (seededRandom(dateSeed) - 0.5) * 50;
+    const demandVariation = (seededRandom(dateSeed + 1) - 0.5) * 40;
     
     data.push({
-      date: date.toISOString().split('T')[0],
-      stock: Math.floor(totalStock + (Math.random() - 0.5) * 50),
-      demand: Math.floor(totalDemand + (Math.random() - 0.5) * 40)
+      date: dateString,
+      stock: Math.floor(totalStock + stockVariation),
+      demand: Math.floor(totalDemand + demandVariation)
     });
   }
   
