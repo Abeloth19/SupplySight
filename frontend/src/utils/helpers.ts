@@ -21,14 +21,14 @@ export const formatDate = (dateString: string): string => {
   });
 };
 
-export const debounce = <T extends (...args: unknown[]) => unknown>(
+export const debounce = <T extends (...args: never[]) => void>(
   func: T,
   delay: number
-): ((...args: Parameters<T>) => void) => {
+): T => {
   let timeoutId: number;
   
-  return (...args: Parameters<T>) => {
+  return ((...args: Parameters<T>) => {
     clearTimeout(timeoutId);
     timeoutId = window.setTimeout(() => func(...args), delay);
-  };
+  }) as T;
 };
