@@ -34,23 +34,24 @@ export const resolvers = {
     warehouses: () => warehouses,
 
     kpis: (_: any, { range }: any) => {
-      const baseStock = products.reduce((sum, p) => sum + p.stock, 0);
-      const baseDemand = products.reduce((sum, p) => sum + p.demand, 0);
+      const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
+      const totalDemand = products.reduce((sum, p) => sum + p.demand, 0);
+      const fulfilled = products.reduce((sum, p) => sum + Math.min(p.stock, p.demand), 0);
       
-      const rangeMultiplier = range === '7d' ? 1 : range === '14d' ? 1.15 : 1.35;
-      const stockVariance = range === '7d' ? 0 : range === '14d' ? 25 : 60;
-      const demandVariance = range === '7d' ? 0 : range === '14d' ? 35 : 80;
+      const trendData = generateKPIData(range);
+      const recentFulfillment = trendData.slice(-7);
+      const avgRecentFulfillment = recentFulfillment.reduce((sum, day) => 
+        sum + Math.min(day.stock, day.demand), 0) / recentFulfillment.length;
+      const avgRecentDemand = recentFulfillment.reduce((sum, day) => 
+        sum + day.demand, 0) / recentFulfillment.length;
       
-      const totalStock = Math.floor(baseStock * rangeMultiplier + stockVariance);
-      const totalDemand = Math.floor(baseDemand * rangeMultiplier + demandVariance);
-      const fulfilled = Math.min(totalStock, totalDemand);
-      const fillRate = totalDemand > 0 ? (fulfilled / totalDemand) * 100 : 0;
+      const fillRate = avgRecentDemand > 0 ? (avgRecentFulfillment / avgRecentDemand) * 100 : 0;
 
       return {
         totalStock,
         totalDemand,
         fillRate: Math.round(fillRate * 100) / 100,
-        trendData: generateKPIData(range)
+        trendData
       };
     }
   },

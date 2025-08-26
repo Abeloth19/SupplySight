@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Container } from './Container';
 import { DashboardHeader } from './DashboardHeader';
 import { KPISection } from './KPISection';
+import { StockDemandChart } from './StockDemandChart';
 import { type DateRange } from '../types';
 
 export function Dashboard() {
@@ -18,13 +19,9 @@ export function Dashboard() {
         <div className="py-8 space-y-8">
           <KPISection selectedRange={selectedRange} />
           
-          <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Inventory Overview
-            </h2>
-         
+          <StockDemandChart selectedRange={selectedRange} />
+          
           </div>
-        </div>
       </Container>
     </div>
   );

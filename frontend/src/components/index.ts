@@ -10,4 +10,5 @@ export { DateChips } from './DateChips';
 export { KPICard } from './KPICard';
 export { DashboardHeader } from './DashboardHeader';
 export { KPISection } from './KPISection';
+export { StockDemandChart } from './StockDemandChart';
 export { Dashboard } from './Dashboard';
