@@ -28,7 +28,7 @@ export const warehouses = [
   { id: "DEL-B", name: "Delhi B", location: "Delhi" }
 ];
 
-// Simple seeded random function for consistent data
+
 const seededRandom = (seed: number) => {
   const x = Math.sin(seed) * 10000;
   return x - Math.floor(x);
@@ -46,7 +46,7 @@ export const generateKPIData = (range: string) => {
     date.setDate(date.getDate() - i);
     const dateString = date.toISOString().split('T')[0];
     
-    // Use date as seed to ensure same values for same date across all ranges
+    
     const dateSeed = new Date(dateString).getTime();
     const stockVariation = (seededRandom(dateSeed) - 0.5) * 50;
     const demandVariation = (seededRandom(dateSeed + 1) - 0.5) * 40;
