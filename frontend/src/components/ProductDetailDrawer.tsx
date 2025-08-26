@@ -13,6 +13,8 @@ interface ProductDetailDrawerProps {
   onClose: () => void;
   onUpdateDemand?: (productId: string, demand: number) => void;
   onTransferStock?: (productId: string, fromWarehouse: string, toWarehouse: string, quantity: number) => void;
+  isUpdatingDemand?: boolean;
+  isTransferringStock?: boolean;
 }
 
 export function ProductDetailDrawer({ 
@@ -20,7 +22,9 @@ export function ProductDetailDrawer({
   isOpen, 
   onClose,
   onUpdateDemand,
-  onTransferStock 
+  onTransferStock,
+  isUpdatingDemand = false,
+  isTransferringStock = false
 }: ProductDetailDrawerProps) {
   const { warehouses } = useWarehouses();
   const [demandValue, setDemandValue] = useState('');
@@ -179,7 +183,12 @@ export function ProductDetailDrawer({
                       required
                     />
                     <div className="flex gap-2">
-                      <Button type="submit" size="sm">
+                      <Button 
+                        type="submit" 
+                        size="sm"
+                        loading={isUpdatingDemand}
+                        disabled={isUpdatingDemand}
+                      >
                         Update
                       </Button>
                       <Button 
@@ -187,6 +196,7 @@ export function ProductDetailDrawer({
                         variant="outline" 
                         size="sm"
                         onClick={() => setActiveForm(null)}
+                        disabled={isUpdatingDemand}
                       >
                         Cancel
                       </Button>
@@ -223,7 +233,12 @@ export function ProductDetailDrawer({
                       required
                     />
                     <div className="flex gap-2">
-                      <Button type="submit" size="sm">
+                      <Button 
+                        type="submit" 
+                        size="sm"
+                        loading={isTransferringStock}
+                        disabled={isTransferringStock}
+                      >
                         Transfer
                       </Button>
                       <Button 
@@ -231,6 +246,7 @@ export function ProductDetailDrawer({
                         variant="outline" 
                         size="sm"
                         onClick={() => setActiveForm(null)}
+                        disabled={isTransferringStock}
                       >
                         Cancel
                       </Button>

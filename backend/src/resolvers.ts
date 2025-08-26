@@ -66,21 +66,41 @@ export const resolvers = {
     },
 
     transferStock: (_: any, { productId, fromWarehouse, toWarehouse, quantity }: any) => {
-      const product = products.find(p => p.id === productId);
-      if (!product) throw new Error('Product not found');
+      const sourceProduct = products.find(p => p.id === productId && p.warehouse === fromWarehouse);
+      if (!sourceProduct) throw new Error('Product not found in specified warehouse');
       
-      if (product.warehouse !== fromWarehouse) {
-        throw new Error('Product not in specified warehouse');
-      }
-      
-      if (product.stock < quantity) {
+      if (sourceProduct.stock < quantity) {
         throw new Error('Insufficient stock for transfer');
       }
       
-      product.stock -= quantity;
-      product.warehouse = toWarehouse;
+
+      const targetProductId = `${productId.split('-')[0]}-${productId.split('-')[1]}${Math.random().toString(36).substr(2, 3)}`;
+      let targetProduct = products.find(p => 
+        p.name === sourceProduct.name && 
+        p.sku === sourceProduct.sku && 
+        p.warehouse === toWarehouse
+      );
       
-      return product;
+
+      sourceProduct.stock -= quantity;
+      
+      if (targetProduct) {
+       
+        targetProduct.stock += quantity;
+        return targetProduct;
+      } else {
+        
+        targetProduct = {
+          id: targetProductId,
+          name: sourceProduct.name,
+          sku: sourceProduct.sku,
+          warehouse: toWarehouse,
+          stock: quantity,
+          demand: 0 
+        };
+        products.push(targetProduct);
+        return targetProduct;
+      }
     }
   }
 };

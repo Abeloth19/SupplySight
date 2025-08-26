@@ -65,7 +65,7 @@ export function ProductsTable({ filters, onProductClick }: ProductsTableProps) {
             </tr>
           </thead>
           <tbody>
-            {pagination.paginatedData.map((product: Product) => {
+            {(pagination.paginatedData as Product[]).map((product: Product) => {
               const status = getProductStatus(product.stock, product.demand);
               const isCritical = status === 'critical';
               

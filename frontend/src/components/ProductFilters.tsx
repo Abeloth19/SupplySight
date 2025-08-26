@@ -12,7 +12,7 @@ interface ProductFiltersProps {
 }
 
 export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps) {
-  const { warehouses, loading: warehousesLoading } = useWarehouses();
+  const { warehouses, loading: warehousesLoading, error: warehousesError } = useWarehouses();
   const [searchValue, setSearchValue] = useState(filters.search);
 
   const handleSearchChange = useCallback((value: string) => {
@@ -31,8 +31,8 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
   }, [searchValue]);
 
   const warehouseOptions = [
-    { value: '', label: 'All Warehouses' },
-    ...warehouses.map(w => ({ value: w.id, label: `${w.name} (${w.location})` }))
+    { value: '', label: warehousesError ? 'Error loading warehouses' : 'All Warehouses' },
+    ...(warehousesError ? [] : warehouses.map(w => ({ value: w.id, label: `${w.name} (${w.location})` })))
   ];
 
   const statusOptions = [
@@ -75,7 +75,7 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
               options={warehouseOptions}
               value={filters.warehouse}
               onChange={handleWarehouseChange}
-              disabled={warehousesLoading}
+              disabled={warehousesLoading || !!warehousesError}
               className="w-full"
             />
           </div>
