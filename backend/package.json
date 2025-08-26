@@ -1,0 +1,21 @@
+{
+  "name": "supplysight-backend",
+  "version": "1.0.0",
+  "description": "GraphQL API for SupplySight Dashboard",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.9.5",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "tsx": "^4.1.4",
+    "typescript": "^5.2.2"
+  }
+}
