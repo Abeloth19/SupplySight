@@ -6,3 +6,8 @@ export { Container } from './Container';
 export { Card } from './Card';
 export { Input } from './Input';
 export { Select } from './Select';
+export { DateChips } from './DateChips';
+export { KPICard } from './KPICard';
+export { DashboardHeader } from './DashboardHeader';
+export { KPISection } from './KPISection';
+export { Dashboard } from './Dashboard';

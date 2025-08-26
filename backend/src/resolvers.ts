@@ -34,9 +34,16 @@ export const resolvers = {
     warehouses: () => warehouses,
 
     kpis: (_: any, { range }: any) => {
-      const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
-      const totalDemand = products.reduce((sum, p) => sum + p.demand, 0);
-      const fulfilled = products.reduce((sum, p) => sum + Math.min(p.stock, p.demand), 0);
+      const baseStock = products.reduce((sum, p) => sum + p.stock, 0);
+      const baseDemand = products.reduce((sum, p) => sum + p.demand, 0);
+      
+      const rangeMultiplier = range === '7d' ? 1 : range === '14d' ? 1.15 : 1.35;
+      const stockVariance = range === '7d' ? 0 : range === '14d' ? 25 : 60;
+      const demandVariance = range === '7d' ? 0 : range === '14d' ? 35 : 80;
+      
+      const totalStock = Math.floor(baseStock * rangeMultiplier + stockVariance);
+      const totalDemand = Math.floor(baseDemand * rangeMultiplier + demandVariance);
+      const fulfilled = Math.min(totalStock, totalDemand);
       const fillRate = totalDemand > 0 ? (fulfilled / totalDemand) * 100 : 0;
 
       return {
