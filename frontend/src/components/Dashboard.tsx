@@ -4,11 +4,13 @@ import { DashboardHeader } from './DashboardHeader';
 import { KPISection } from './KPISection';
 import { StockDemandChart } from './StockDemandChart';
 import { ProductFilters } from './ProductFilters';
+import { ProductsTable } from './ProductsTable';
 import { useProductFilters } from '../hooks/useProductFilters';
-import { type DateRange, type ProductFilters as ProductFiltersType } from '../types';
+import { type DateRange, type ProductFilters as ProductFiltersType, type Product } from '../types';
 
 export function Dashboard() {
   const [selectedRange, setSelectedRange] = useState<DateRange>('7d');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { filters, updateFilters } = useProductFilters();
 
   const handleRangeChange = useCallback((range: DateRange) => {
@@ -17,6 +19,10 @@ export function Dashboard() {
 
   const handleFiltersChange = useCallback((newFilters: ProductFiltersType) => {
     updateFilters(newFilters);
+  }, []);
+
+  const handleProductClick = useCallback((product: Product) => {
+    setSelectedProduct(product);
   }, []);
 
   return (
@@ -45,15 +51,10 @@ export function Dashboard() {
               onFiltersChange={handleFiltersChange} 
             />
             
-            <div className="bg-white rounded-lg border p-6">
-         
-              <div className="mt-4 text-sm text-gray-500">
-                <p>Current filters:</p>
-                <pre className="mt-2 bg-gray-50 p-2 rounded">
-                  {JSON.stringify(filters, null, 2)}
-                </pre>
-              </div>
-            </div>
+            <ProductsTable 
+              filters={filters}
+              onProductClick={handleProductClick}
+            />
           </div>
         </div>
       </Container>
